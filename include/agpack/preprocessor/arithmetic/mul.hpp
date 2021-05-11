@@ -1,0 +1,53 @@
+# /* Copyright (C) 2001
+#  * Housemarque Oy
+#  * http://www.housemarque.com
+#  *
+#  * Distributed under the Boost Software License, Version 1.0. (See
+#  * accompanying file LICENSE_1_0.txt or copy at
+#  * http://www.boost.org/LICENSE_1_0.txt)
+#  */
+#
+# /* Revised by Paul Mensonides (2002) */
+#
+# /* See http://www.boost.org for most recent version. */
+#
+# ifndef AGPACK_PREPROCESSOR_ARITHMETIC_MUL_HPP
+# define AGPACK_PREPROCESSOR_ARITHMETIC_MUL_HPP
+#
+# include <agpack/preprocessor/arithmetic/add.hpp>
+# include <agpack/preprocessor/arithmetic/dec.hpp>
+# include <agpack/preprocessor/config/config.hpp>
+# include <agpack/preprocessor/control/while.hpp>
+# include <agpack/preprocessor/tuple/elem.hpp>
+# include <agpack/preprocessor/tuple/rem.hpp>
+#
+# /* AGPACK_PP_MUL */
+#
+# if ~AGPACK_PP_CONFIG_FLAGS() & AGPACK_PP_CONFIG_EDG()
+#    define AGPACK_PP_MUL(x, y) AGPACK_PP_TUPLE_ELEM(3, 0, AGPACK_PP_WHILE(AGPACK_PP_MUL_P, AGPACK_PP_MUL_O, (0, x, y)))
+# else
+#    define AGPACK_PP_MUL(x, y) AGPACK_PP_MUL_I(x, y)
+#    define AGPACK_PP_MUL_I(x, y) AGPACK_PP_TUPLE_ELEM(3, 0, AGPACK_PP_WHILE(AGPACK_PP_MUL_P, AGPACK_PP_MUL_O, (0, x, y)))
+# endif
+#
+# define AGPACK_PP_MUL_P(d, rxy) AGPACK_PP_TUPLE_ELEM(3, 2, rxy)
+#
+# if AGPACK_PP_CONFIG_FLAGS() & AGPACK_PP_CONFIG_STRICT()
+#    define AGPACK_PP_MUL_O(d, rxy) AGPACK_PP_MUL_O_IM(d, AGPACK_PP_TUPLE_REM_3 rxy)
+#    define AGPACK_PP_MUL_O_IM(d, im) AGPACK_PP_MUL_O_I(d, im)
+# else
+#    define AGPACK_PP_MUL_O(d, rxy) AGPACK_PP_MUL_O_I(d, AGPACK_PP_TUPLE_ELEM(3, 0, rxy), AGPACK_PP_TUPLE_ELEM(3, 1, rxy), AGPACK_PP_TUPLE_ELEM(3, 2, rxy))
+# endif
+#
+# define AGPACK_PP_MUL_O_I(d, r, x, y) (AGPACK_PP_ADD_D(d, r, x), x, AGPACK_PP_DEC(y))
+#
+# /* AGPACK_PP_MUL_D */
+#
+# if ~AGPACK_PP_CONFIG_FLAGS() & AGPACK_PP_CONFIG_EDG()
+#    define AGPACK_PP_MUL_D(d, x, y) AGPACK_PP_TUPLE_ELEM(3, 0, AGPACK_PP_WHILE_ ## d(AGPACK_PP_MUL_P, AGPACK_PP_MUL_O, (0, x, y)))
+# else
+#    define AGPACK_PP_MUL_D(d, x, y) AGPACK_PP_MUL_D_I(d, x, y)
+#    define AGPACK_PP_MUL_D_I(d, x, y) AGPACK_PP_TUPLE_ELEM(3, 0, AGPACK_PP_WHILE_ ## d(AGPACK_PP_MUL_P, AGPACK_PP_MUL_O, (0, x, y)))
+# endif
+#
+# endif
