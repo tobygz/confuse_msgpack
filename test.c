@@ -1,36 +1,75 @@
 #include "include/agpack.h"
 #include <stdio.h>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void test(){
+
+	agpack_zone mempool;
+	agpack_zone_init(&mempool, 2048);
+
+	vector<uint8_t> sbuf = {131,162,105,100,166,54,54,51,53,52,57,161,116,162,106,50,161,109,222,0,17,164,115,101,105,100,217,32,57,49,52,51,67,67,48,65,53,68,68,65,56,66,70,55,53,67,55,54,48,51,70,66,48,69,51,65,55,70,67,54,163,97,105,100,217,32,97,97,98,56,98,56,102,53,97,56,99,100,52,52,54,57,97,54,51,48,52,50,102,99,102,97,102,101,55,48,54,51,162,99,107,217,32,97,97,98,56,98,56,102,53,97,56,99,100,52,52,54,57,97,54,51,48,52,50,102,99,102,97,102,101,55,48,54,51,162,99,110,167,103,122,121,104,97,104,97,162,115,118,165,52,46,52,46,48,161,98,217,121,77,111,122,105,108,108,97,47,53,46,48,32,40,77,97,99,105,110,116,111,115,104,59,32,73,110,116,101,108,32,77,97,99,32,79,83,32,88,32,49,48,95,49,53,95,55,41,32,65,112,112,108,101,87,101,98,75,105,116,47,53,51,55,46,51,54,32,40,75,72,84,77,76,44,32,108,105,107,101,32,71,101,99,107,111,41,32,67,104,114,111,109,101,47,57,48,46,48,46,52,52,51,48,46,50,49,50,32,83,97,102,97,114,105,47,53,51,55,46,51,54,164,112,99,105,100,217,44,112,114,111,99,101,115,115,45,52,50,102,51,55,102,98,51,45,102,101,52,101,45,51,49,100,50,45,100,48,57,102,45,48,97,52,52,98,102,100,54,49,50,49,56,161,109,164,108,105,118,101,161,99,163,118,112,57,161,114,164,104,111,115,116,163,104,99,103,194,162,97,114,137,164,99,111,100,101,0,164,102,108,97,103,205,16,0,164,111,112,105,100,204,133,163,99,105,100,206,132,204,10,15,163,117,105,100,206,181,46,134,223,169,115,101,114,118,101,114,95,116,115,207,0,0,1,121,91,66,224,153,165,99,110,97,109,101,167,103,122,121,104,97,104,97,166,100,101,116,97,105,108,135,161,49,174,49,56,51,46,49,51,52,46,57,52,46,49,50,51,161,50,164,67,84,69,76,161,51,162,67,78,161,52,217,44,69,55,106,114,90,65,75,56,80,79,86,90,80,49,120,105,80,51,75,80,84,106,118,70,55,102,120,101,115,43,105,48,68,97,110,67,43,120,103,118,102,80,73,61,161,56,166,49,51,48,52,53,49,162,49,48,217,32,97,97,98,56,98,56,102,53,97,56,99,100,52,52,54,57,97,54,51,48,52,50,102,99,102,97,102,101,55,48,54,51,163,53,48,50,173,52,55,46,57,53,46,50,53,48,46,50,49,56,166,116,105,99,107,101,116,217,124,83,51,100,66,81,85,70,66,86,85,70,114,76,122,66,67,81,85,52,114,82,48,120,121,86,85,82,66,82,51,112,66,90,106,78,106,98,88,90,89,79,84,78,90,97,86,78,66,90,68,70,83,100,109,49,116,81,85,70,66,81,85,70,66,81,110,100,67,98,109,86,117,98,71,57,90,86,50,104,111,82,107,70,66,90,48,56,118,101,107,104,113,90,49,78,80,87,86,65,48,100,110,78,119,98,106,70,111,78,72,112,79,81,106,66,108,97,84,90,51,80,84,48,61,162,101,115,160,161,100,129,161,54,192,162,102,116,129,166,114,101,106,111,105,110,195,172,111,112,116,105,111,110,97,108,73,110,102,111,192,171,97,112,112,83,99,101,110,97,114,105,111,192};
+	agpack_object deserialized;
+	agpack_unpack((const char*)sbuf.data(), sbuf.size(), NULL, &mempool, &deserialized);
+
+	/* print the deserialized object. */
+	agpack_object_print_my(stdout, deserialized);
+	puts("");
+
+	printf("\r\n");
+
+
+	char result[1024] = {0};
+	int ret = agpack_object_print_buffer( result, 1024, deserialized);
+	printf("ret:%d\n", ret );
+	printf("result:%s\n", result);
+
+	for(int i=0;i<1024;i++){
+		printf("%d:%c|%d\n",i,result[i],result[i]);
+	}
+
+}
 
 int main(void)
 {
-    /* agpack::sbuffer is a simple buffer implementation. */
-    agpack_sbuffer sbuf;
-    agpack_sbuffer_init(&sbuf);
+	if(1){
+		test();
+		return 0;
+	}
+	/* agpack::sbuffer is a simple buffer implementation. */
+	agpack_sbuffer sbuf;
+	agpack_sbuffer_init(&sbuf);
 
-    /* serialize values into the buffer using agpack_sbuffer_write callback function. */
-    agpack_packer pk;
-    agpack_packer_init(&pk, &sbuf, agpack_sbuffer_write);
+	/* serialize values into the buffer using agpack_sbuffer_write callback function. */
+	agpack_packer pk;
+	agpack_packer_init(&pk, &sbuf, agpack_sbuffer_write);
 
-    agpack_pack_array(&pk, 3);
-    agpack_pack_int(&pk, 1);
-    agpack_pack_true(&pk);
-    agpack_pack_str(&pk, 7);
-    agpack_pack_str_body(&pk, "example", 7);
+	agpack_pack_array(&pk, 3);
+	agpack_pack_int(&pk, 1);
+	agpack_pack_true(&pk);
+	agpack_pack_str(&pk, 7);
+	agpack_pack_str_body(&pk, "example", 7);
 
-    /* deserialize the buffer into agpack_object instance. */
-    /* deserialized object is valid during the agpack_zone instance alive. */
-    agpack_zone mempool;
-    agpack_zone_init(&mempool, 2048);
+	/* deserialize the buffer into agpack_object instance. */
+	/* deserialized object is valid during the agpack_zone instance alive. */
+	agpack_zone mempool;
+	agpack_zone_init(&mempool, 2048);
 
-    agpack_object deserialized;
-    agpack_unpack(sbuf.data, sbuf.size, NULL, &mempool, &deserialized);
+	agpack_object deserialized;
+	agpack_unpack(sbuf.data, sbuf.size, NULL, &mempool, &deserialized);
 
-    /* print the deserialized object. */
-    agpack_object_print(stdout, deserialized);
-    puts("");
+	/* print the deserialized object. */
+	agpack_object_print(stdout, deserialized);
+	puts("");
 
-    agpack_zone_destroy(&mempool);
-    agpack_sbuffer_destroy(&sbuf);
+	char result[10240] = {0};
+	int ret = agpack_object_print_buffer( result, 10240, deserialized);
+	printf("ret:%d\n", ret );
 
-    return 0;
+	agpack_zone_destroy(&mempool);
+	agpack_sbuffer_destroy(&sbuf);
+
+	return 0;
 }

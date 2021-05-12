@@ -1,5 +1,10 @@
 all:
-	gcc test.c -I. -I./include -L. -lagpack -o test0
+	#g++ -g test.c -I. -I./include -L. -lagpack -o test0
+	g++ -g test.c ./src/*.c -I. -I./include  -o test0
+
+cpp:
+	g++ -g test.cpp ./src/*.c -I. -I./include  -o test0
+
 
 lib:
 	cd ./src && gcc -c ./*.c -I.. -I../include && cd -
